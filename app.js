@@ -6,7 +6,7 @@ const ejs = require("ejs");
 const _ = require("lodash");
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb+srv://admin-chao:Qaz1207wsx@cluster0.qhfpx.mongodb.net/blogDB");
+mongoose.connect("mongodb+srv://admin-<user>:<password>@cluster0.qhfpx.mongodb.net/blogDB");
 // require mongoose, and connect to mongoose cloud atlas.
 
 
@@ -26,8 +26,8 @@ app.use(express.static("public"));
 
 //create a MongoDb chema
 const blogSchema = new mongoose.Schema({
-  title:String,
-  content:String
+  title: String,
+  content: String
 })
 //and the create a mongoose model
 const Blog = new mongoose.model("Blog", blogSchema);
@@ -36,8 +36,8 @@ const Blog = new mongoose.model("Blog", blogSchema);
 
 app.get("/", function(req, res) {
 
-  Blog.find({}, (err, posts)=>{
-    if (!err){
+  Blog.find({}, (err, posts) => {
+    if (!err) {
       res.render("home", {
         startingContent: homeStartingContent,
         posts: posts
@@ -68,15 +68,15 @@ app.get("/compose", function(req, res) {
 
 
 app.post("/compose", function(req, res) {
-  const post = new Blog ({
+  const post = new Blog({
     title: req.body.postTitle,
     content: req.body.postBody
   });
 
   // posts.push(post);
-  post.save((err)=>{
-    if(!err){
-        res.redirect("/");
+  post.save((err) => {
+    if (!err) {
+      res.redirect("/");
     }
   });
 
@@ -86,15 +86,20 @@ app.post("/compose", function(req, res) {
 
 app.get("/posts/:postID", function(req, res) {
   const requestedTitle = _.lowerCase(req.params.postName);
-  const  requestPostID = req.params.postID;
+  const requestPostID = req.params.postID;
 
-  Blog.findOne({_id:requestPostID}, (err,post)=>{
-    if(!err){
-      res.render("post",{title:post.title, content:post.content})
+  Blog.findOne({
+    _id: requestPostID
+  }, (err, post) => {
+    if (!err) {
+      res.render("post", {
+        title: post.title,
+        content: post.content
+      })
     }
   })
 
-  
+
 
 });
 
